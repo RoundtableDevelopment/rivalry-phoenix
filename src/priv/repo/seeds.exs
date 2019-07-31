@@ -12,4 +12,4 @@
 
 alias Rivalry.Accounts
 
-Accounts.create_user(%{username: "dmcbrayer", email: "user@mail.com"})
+Accounts.create_user(%{username: "dmcbrayer", email: "user@mail.com", password: "qwer1234"})
