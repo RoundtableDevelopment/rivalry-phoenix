@@ -2,31 +2,36 @@ defmodule Rivalry.AccountsTest do
   use Rivalry.DataCase
 
   alias Rivalry.Accounts
+  alias Rivalry.Accounts.User
 
-  describe "users" do
-    alias Rivalry.Accounts.User
+  def user_fixture(attrs \\ %{}) do
+    username = "user#{System.unique_integer([:positive])}"
 
-    @valid_attrs %{email: "some email", username: "some username"}
-    @update_attrs %{email: "some updated email", username: "some updated username"}
-    @invalid_attrs %{email: nil, username: nil}
-
-    def user_fixture(attrs \\ %{}) do
-      {:ok, user} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Accounts.create_user()
+    {:ok, user} =
+      attrs
+      |> Enum.into(%{
+          username: username,
+          email: attrs[:email] || "user@mail.com",
+          password: attrs[:password] || "password"
+        })
+      |> Accounts.create_user()
 
       user
-    end
+  end
+
+  describe "users" do
+    @valid_attrs %{email: "some email", username: "some username", password: "password"}
+    @update_attrs %{email: "some updated email", username: "some updated username", password: "password"}
+    @invalid_attrs %{email: nil, username: nil, password: nil}
 
     test "list_users/0 returns all users" do
-      user = user_fixture()
-      assert Accounts.list_users() == [user]
+      %User{id: id} = user_fixture()
+      assert [%User{id: ^id}] = Accounts.list_users()
     end
 
     test "get_user!/1 returns the user with given id" do
-      user = user_fixture()
-      assert Accounts.get_user!(user.id) == user
+      %User{id: id} = user_fixture()
+      assert %User{id: ^id} = Accounts.get_user!(id)
     end
 
     test "create_user/1 with valid data creates a user" do
@@ -49,7 +54,7 @@ defmodule Rivalry.AccountsTest do
     test "update_user/2 with invalid data returns error changeset" do
       user = user_fixture()
       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
-      assert user == Accounts.get_user!(user.id)
+      assert user.id == Accounts.get_user!(user.id).id
     end
 
     test "delete_user/1 deletes the user" do
@@ -61,6 +66,28 @@ defmodule Rivalry.AccountsTest do
     test "change_user/1 returns a user changeset" do
       user = user_fixture()
       assert %Ecto.Changeset{} = Accounts.change_user(user)
+    end
+
+  end
+
+  describe "authenticate_by_email_and_pass/2" do
+    @email "user@localhost"
+    @pass "123456"
+
+    setup do
+      {:ok, user: user_fixture(email: @email, password: @pass)}
+    end
+
+    test "returns user with correct password", %{user: %User{id: id}} do
+      assert {:ok, %User{id: ^id}} = Accounts.authenticate_by_email_and_pass(@email, @pass)
+    end
+
+    test "returns unauthorized error with invalid password" do
+      assert {:error, :unauthorized} = Accounts.authenticate_by_email_and_pass(@email, "badpass")
+    end
+
+    test "returns not found error with no matching user for email" do
+      assert {:error, :not_found} = Accounts.authenticate_by_email_and_pass("bademail@localhost", @pass)
     end
   end
 end
