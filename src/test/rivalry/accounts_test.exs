@@ -4,21 +4,6 @@ defmodule Rivalry.AccountsTest do
   alias Rivalry.Accounts
   alias Rivalry.Accounts.User
 
-  def user_fixture(attrs \\ %{}) do
-    username = "user#{System.unique_integer([:positive])}"
-
-    {:ok, user} =
-      attrs
-      |> Enum.into(%{
-          username: username,
-          email: attrs[:email] || "user@mail.com",
-          password: attrs[:password] || "password"
-        })
-      |> Accounts.create_user()
-
-      user
-  end
-
   describe "users" do
     @valid_attrs %{email: "some email", username: "some username", password: "password"}
     @update_attrs %{email: "some updated email", username: "some updated username", password: "password"}

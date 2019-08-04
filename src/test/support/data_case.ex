@@ -22,6 +22,7 @@ defmodule Rivalry.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Rivalry.DataCase
+      import Rivalry.TestHelpers
     end
   end
 
