@@ -23,6 +23,7 @@ defmodule RivalryWeb do
 
       import Plug.Conn
       import RivalryWeb.Gettext
+      import RivalryWeb.Auth, only: [authenticate_user: 2]
       alias RivalryWeb.Router.Helpers, as: Routes
     end
   end
@@ -50,6 +51,7 @@ defmodule RivalryWeb do
       use Phoenix.Router
       import Plug.Conn
       import Phoenix.Controller
+      import RivalryWeb.Auth, only: [authenticate_user: 2]
     end
   end
 
