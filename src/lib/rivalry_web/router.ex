@@ -20,6 +20,7 @@ defmodule RivalryWeb.Router do
     get "/", PageController, :index
 
     resources "/sessions", SessionController, only: [:new, :create, :delete]
+    resources "/registrations", RegistrationController, only: [:new, :create]
   end
 
   # Other scopes may use custom stacks.

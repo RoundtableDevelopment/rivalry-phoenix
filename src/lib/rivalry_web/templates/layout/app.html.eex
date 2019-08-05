@@ -16,6 +16,7 @@
             <%=  if @current_user do %>
                 <li><%= link "Log out", to: Routes.session_path(@conn, :delete, @current_user), method: "delete" %></li>
             <% else %>
+                <li><%= link "Register", to: Routes.registration_path(@conn, :new) %></li>
                 <li><%= link "Log in", to: Routes.session_path(@conn, :new) %></li>
             <% end %>
           </ul>
@@ -27,6 +28,7 @@
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= render @view_module, @view_template, assigns %>
     </main>
+    <script>window.userToken = "<%= assigns[:user_token] %>"</script>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

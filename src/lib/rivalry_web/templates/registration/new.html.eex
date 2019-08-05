@@ -1,0 +1,14 @@
+<h1>Register</h1>
+
+<%= form_for @conn, Routes.registration_path(@conn, :create), [as: :registration], fn f -> %>
+    <div>
+        <%= text_input f, :email, placeholder: "Email" %>
+    </div>
+    <div>
+        <%= text_input f, :username, placeholder: "Username" %>
+    </div>
+    <div>
+        <%= password_input f, :password, placeholder: "Password" %>
+    </div>
+    <%= submit "Sign up" %>
+<% end %>
