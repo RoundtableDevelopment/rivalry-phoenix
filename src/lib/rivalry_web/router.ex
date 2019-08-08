@@ -21,6 +21,11 @@ defmodule RivalryWeb.Router do
 
     resources "/sessions", SessionController, only: [:new, :create, :delete]
     resources "/registrations", RegistrationController, only: [:new, :create]
+
+    scope "/" do
+      pipe_through [:authenticate_user]
+      resources "/users", UserController, only: [:edit, :update]
+    end
   end
 
   # Other scopes may use custom stacks.

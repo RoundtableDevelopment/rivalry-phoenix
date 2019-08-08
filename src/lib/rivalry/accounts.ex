@@ -78,6 +78,13 @@ defmodule Rivalry.Accounts do
     |> Repo.update()
   end
 
+
+  def update_user_team(%User{} = user, attrs) do
+    user
+    |> User.team_changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Deletes a User.
 
@@ -105,6 +112,10 @@ defmodule Rivalry.Accounts do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+  def change_user_team(%User{} = user) do
+    User.team_changeset(user, %{})
   end
 
   def authenticate_by_email_and_pass(email, given_pass) do

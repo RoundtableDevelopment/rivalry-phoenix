@@ -21,6 +21,11 @@ defmodule Rivalry.Teams do
     Repo.all(Team)
   end
 
+  def list_teams_for_select do
+    from(t in Team, select: {t.name, t.id}, order_by: t.name)
+    |> Repo.all
+  end
+
   @doc """
   Gets a single team.
 

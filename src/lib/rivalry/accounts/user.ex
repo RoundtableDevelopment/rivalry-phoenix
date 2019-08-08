@@ -16,11 +16,17 @@ defmodule Rivalry.Accounts.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username, :email, :password])
+    |> cast(attrs, [:username, :email, :password, :team_id])
     |> validate_required([:username, :email, :password])
     |> validate_length(:password, min: 6, max: 100)
     |> unique_constraint(:username)
     |> put_pass_hash()
+  end
+
+  def team_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:team_id])
+    |> validate_required([:team_id])
   end
 
   defp put_pass_hash(changeset) do
