@@ -51,7 +51,7 @@ defmodule RivalryWeb do
       use Phoenix.Router
       import Plug.Conn
       import Phoenix.Controller
-      import RivalryWeb.Auth, only: [authenticate_user: 2]
+      import RivalryWeb.Auth, only: [authenticate_user: 2, authenticate_admin: 2]
     end
   end
 

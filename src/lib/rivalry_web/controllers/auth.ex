@@ -51,6 +51,17 @@ defmodule RivalryWeb.Auth do
     end
   end
 
+  def authenticate_admin(conn, _opts) do
+    if conn.assigns.current_user.is_admin do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You cannot access that page")
+      |> redirect(to: Routes.page_path(conn, :index))
+      |> halt()
+    end
+  end
+
   defp put_current_user(conn, user) do
     token = Phoenix.Token.sign(conn, "user socket", user.id)
 
