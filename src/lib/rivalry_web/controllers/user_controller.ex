@@ -13,18 +13,18 @@ defmodule RivalryWeb.UserController do
     apply(__MODULE__, action_name(conn), args)
   end
 
-  def edit(conn, _params, current_user) do
+  def edit(conn, _params, _current_user) do
     user = conn.assigns.user
     changeset = Accounts.change_user_team(user)
 
     render(conn, "edit.html", user: user, changeset: changeset)
   end
 
-  def update(conn, %{"user" => user_params}, current_user) do
+  def update(conn, %{"user" => user_params}, _current_user) do
     user = conn.assigns.user
 
     case Accounts.update_user_team(user, user_params) do
-      {:ok, user} ->
+      {:ok, _user} ->
         conn
         |> put_flash(:info, "Your profile has been updated successfully")
         |> redirect(to: Routes.page_path(conn, :index))
