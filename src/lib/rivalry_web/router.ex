@@ -28,6 +28,13 @@ defmodule RivalryWeb.Router do
     end
   end
 
+  scope "/admin", RivalryWeb.Admin, as: :admin do
+    pipe_through [:browser, :authenticate_user, :authenticate_admin]
+
+    resources "/users", UserController, only: [:index, :delete]
+  end
+
+
   # Other scopes may use custom stacks.
   # scope "/api", RivalryWeb do
   #   pipe_through :api

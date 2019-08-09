@@ -1,0 +1,28 @@
+<h1>This is an admin interface</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <%= for user <- @users do %>
+            <tr>
+                <td><%= user.id %></td>
+                <td><%= user.username %></td>
+                <td><%= user.email %></td>
+                <td>
+                    <%= link "Delete", to: Routes.admin_user_path(@conn, :delete, user),
+                    method: :delete,
+                    data: [confirm: "Are you sure?"] %>
+                </td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+
+
