@@ -10,7 +10,8 @@ defmodule Rivalry.TestHelpers do
       |> Enum.into(%{
           username: username,
           email: attrs[:email] || "user@mail.com",
-          password: attrs[:password] || "password"
+          password: attrs[:password] || "password",
+          is_admin: attrs[:is_admin] || false
          })
       |> Accounts.create_user()
 

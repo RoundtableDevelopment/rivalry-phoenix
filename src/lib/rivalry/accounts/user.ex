@@ -8,6 +8,7 @@ defmodule Rivalry.Accounts.User do
     field :username, :string
     field :password, :string, virtual: true
     field :password_hash, :string
+    field :is_admin, :boolean, default: false
     belongs_to :team, Team
 
     timestamps()
@@ -16,7 +17,7 @@ defmodule Rivalry.Accounts.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username, :email, :password, :team_id])
+    |> cast(attrs, [:username, :email, :password, :team_id, :is_admin])
     |> validate_required([:username, :email, :password])
     |> validate_length(:password, min: 6, max: 100)
     |> unique_constraint(:username)

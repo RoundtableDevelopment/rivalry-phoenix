@@ -13,10 +13,15 @@
 alias Rivalry.Accounts
 alias Rivalry.Teams
 
-Accounts.create_user(%{username: "dmcbrayer", email: "user@mail.com", password: "qwer1234"})
+Accounts.create_user(%{
+  username: "dmcbrayer",
+  email: "user@mail.com",
+  password: "qwer1234",
+  is_admin: true
+})
 
 
 teams = ["Alabama", "Auburn", "Georgia", "Texas", "Florida"]
 for team <- teams do
-    Teams.create_team(%{name: team})
+  Teams.create_team(%{name: team})
 end
