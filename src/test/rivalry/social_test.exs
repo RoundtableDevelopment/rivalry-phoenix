@@ -63,4 +63,61 @@ defmodule Rivalry.SocialTest do
       assert %Ecto.Changeset{} = Social.change_friend_request(friend_request)
     end
   end
+
+  describe "user_friends" do
+    alias Rivalry.Social.UserFriend
+
+    @valid_attrs %{}
+    @update_attrs %{}
+    @invalid_attrs %{}
+
+    def user_friend_fixture(attrs \\ %{}) do
+      {:ok, user_friend} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Social.create_user_friend()
+
+      user_friend
+    end
+
+    test "list_user_friends/0 returns all user_friends" do
+      user_friend = user_friend_fixture()
+      assert Social.list_user_friends() == [user_friend]
+    end
+
+    test "get_user_friend!/1 returns the user_friend with given id" do
+      user_friend = user_friend_fixture()
+      assert Social.get_user_friend!(user_friend.id) == user_friend
+    end
+
+    test "create_user_friend/1 with valid data creates a user_friend" do
+      assert {:ok, %UserFriend{} = user_friend} = Social.create_user_friend(@valid_attrs)
+    end
+
+    test "create_user_friend/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Social.create_user_friend(@invalid_attrs)
+    end
+
+    test "update_user_friend/2 with valid data updates the user_friend" do
+      user_friend = user_friend_fixture()
+      assert {:ok, %UserFriend{} = user_friend} = Social.update_user_friend(user_friend, @update_attrs)
+    end
+
+    test "update_user_friend/2 with invalid data returns error changeset" do
+      user_friend = user_friend_fixture()
+      assert {:error, %Ecto.Changeset{}} = Social.update_user_friend(user_friend, @invalid_attrs)
+      assert user_friend == Social.get_user_friend!(user_friend.id)
+    end
+
+    test "delete_user_friend/1 deletes the user_friend" do
+      user_friend = user_friend_fixture()
+      assert {:ok, %UserFriend{}} = Social.delete_user_friend(user_friend)
+      assert_raise Ecto.NoResultsError, fn -> Social.get_user_friend!(user_friend.id) end
+    end
+
+    test "change_user_friend/1 returns a user_friend changeset" do
+      user_friend = user_friend_fixture()
+      assert %Ecto.Changeset{} = Social.change_user_friend(user_friend)
+    end
+  end
 end
