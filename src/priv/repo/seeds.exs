@@ -12,6 +12,7 @@
 
 alias Rivalry.Accounts
 alias Rivalry.Teams
+alias Rivalry.Social
 
 users = [
   %{
@@ -61,3 +62,14 @@ end
 for team <- teams do
   Teams.create_team(%{name: team})
 end
+
+# Set up some social tests
+[user1, user2, user3, user4] =
+  [Accounts.get_user!(1), Accounts.get_user!(2), Accounts.get_user!(3), Accounts.get_user!(4)]
+
+{:ok, fr1} = Social.send_friend_request(user1, user2)
+{:ok, fr2} = Social.send_friend_request(user1, user3)
+{:ok, _fr3} = Social.send_friend_request(user1, user4)
+
+Social.accept_friend_request(fr1)
+Social.accept_friend_request(fr2)
