@@ -74,6 +74,26 @@ defmodule Rivalry.Social do
     Repo.all(FriendRequest)
   end
 
+  def list_sent_requests_for_user(user) do
+    query =
+      from f in FriendRequest,
+      where: f.user_id == ^user.id,
+      where: f.status == "pending",
+      preload: [:user, :friend]
+
+    Repo.all(query)
+  end
+
+  def list_received_requests_for_user(user) do
+    query =
+      from f in FriendRequest,
+      where: f.friend_id == ^user.id,
+      where: f.status == "pending",
+      preload: [:user, :friend]
+
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single friend_request.
 

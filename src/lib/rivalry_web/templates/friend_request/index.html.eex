@@ -1,0 +1,44 @@
+<h1>Friend Requests</h1>
+
+<h3>Received Requests</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Status</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <%= for request <- @received_requests do %>
+            <tr>
+                <td><%= request.friend.username %></td>
+                <td><%= request.status %></td>
+                <td>Accept Button</td>
+                <td>Reject Button</td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+
+<h3>Sent Requests</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <%= for request <- @sent_requests do %>
+            <tr>
+                <td><%= request.friend.username %></td>
+                <td><%= request.status %></td>
+                <td>Cancel Button</td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+
