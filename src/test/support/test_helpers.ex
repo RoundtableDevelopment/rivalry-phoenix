@@ -1,5 +1,5 @@
 defmodule Rivalry.TestHelpers do
-  alias Rivalry.Accounts
+  alias Rivalry.{Accounts,Social}
   alias Rivalry.Teams
 
   def user_fixture(attrs \\ %{}) do
@@ -25,5 +25,37 @@ defmodule Rivalry.TestHelpers do
       |> Teams.create_team()
 
     team
+  end
+
+  def friend_request_fixture(attrs \\ %{}) do
+    [user1, user2] = [user_fixture(), user_fixture()]
+
+    {:ok, friend_request} =
+      attrs
+      |> Enum.into(%{
+            user_id: attrs[:user_id] || user1.id,
+            friend_id: attrs[:friend_id] || user2.id,
+            status: attrs[:status] || "pending",
+            accepted_at: attrs[:accepted_at] || nil
+         })
+      |> Social.create_friend_request()
+
+    friend_request
+  end
+
+  def user_friend_fixture(attrs \\ %{}) do
+    [user1, user2] = [user_fixture(), user_fixture()]
+    friend_request = friend_request_fixture(%{user_id: user1.id, friend_id: user2.id})
+
+    {:ok, user_friend} =
+      attrs
+      |> Enum.into(%{
+          user_id: attrs[:user_id] || user1.id,
+          friend_id: attrs[:friend_id] || user2.id,
+          friend_request_id: attrs[:friend_request_id] || friend_request.id,
+         })
+      |> Social.create_user_friend()
+
+    user_friend
   end
 end
