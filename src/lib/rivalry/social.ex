@@ -4,9 +4,62 @@ defmodule Rivalry.Social do
   """
 
   import Ecto.Query, warn: false
+  alias Ecto.Multi
   alias Rivalry.Repo
 
-  alias Rivalry.Social.FriendRequest
+  alias Rivalry.Social.{FriendRequest,UserFriend}
+
+  def list_friends_for_user(id) do
+    user = Repo.get!(Rivalry.Accounts.User, id)
+           |> Repo.preload(:friends)
+
+    user.friends
+  end
+
+  def send_friend_request(user, friend) do
+    create_friend_request(%{user_id: user.id, friend_id: friend.id, status: "pending"})
+  end
+
+  def reject_friend_request(friend_request) do
+    update_friend_request(friend_request, %{status: "rejected"})
+  end
+
+  def accept_friend_request(friend_request) do
+    fr_changeset =
+      friend_request
+      |> FriendRequest.changeset(%{status: "accepted"})
+
+    [friendship_1, friendship_2] = friendship_changesets(friend_request)
+
+    Multi.new
+    |> Multi.update(:friend_request, fr_changeset)
+    |> Multi.insert(:user_friend_sender, friendship_1)
+    |> Multi.insert(:user_friend_receiver, friendship_2)
+    |> Repo.transaction()
+  end
+
+  @doc """
+  This creates the two user_friend sets of attributes
+  necessary to create a two-way friendship between users
+
+  """
+  def friendship_changesets(friend_request) do
+    user = %{
+      user_id: friend_request.user_id,
+      friend_id: friend_request.friend_id,
+      friend_request_id: friend_request.id
+    }
+    friend = %{
+      user_id: friend_request.friend_id,
+      friend_id: friend_request.user_id,
+      friend_request_id: friend_request.id
+    }
+
+    [
+      %UserFriend{} |> UserFriend.changeset(user),
+      %UserFriend{} |> UserFriend.changeset(friend)
+    ]
+  end
 
   @doc """
   Returns the list of friend_requests.

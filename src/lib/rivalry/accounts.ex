@@ -43,6 +43,12 @@ defmodule Rivalry.Accounts do
     |> Repo.one()
   end
 
+
+  def get_user_with_friends!(id) do
+    get_user!(id)
+    |> Repo.preload(:friends)
+  end
+
   @doc """
   Creates a user.
 

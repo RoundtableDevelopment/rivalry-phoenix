@@ -3,6 +3,45 @@ defmodule Rivalry.SocialTest do
 
   alias Rivalry.Social
 
+  describe "creating friendships" do
+    alias Rivalry.Social.{FriendRequest, UserFriend}
+
+    test "send_friend_request/2 creates a pending friend request" do
+      [user1, user2] = [user_fixture(), user_fixture()]
+
+      assert {:ok, %FriendRequest{} = friend_request} = Social.send_friend_request(user1, user2)
+      assert friend_request.status == "pending"
+    end
+
+    test "reject_friend_request/1 sets status to rejected" do
+      [user1, user2] = [user_fixture(), user_fixture()]
+      friend_request = friend_request_fixture(%{user_id: user1.id, friend_id: user2.id, status: "pending"})
+
+      assert {:ok, friend_request} = Social.reject_friend_request(friend_request)
+      assert friend_request.status == "rejected"
+    end
+
+    test "accept_friend_request/1 creates a friendship between two users" do
+      [user1, user2] = [user_fixture(), user_fixture()]
+      friend_request = friend_request_fixture(%{user_id: user1.id, friend_id: user2.id, status: "pending"})
+
+      assert {
+        :ok,
+        %{
+          friend_request: friend_request,
+          user_friend_sender: user,
+          user_friend_receiver: friend
+        }
+      } = Social.accept_friend_request(friend_request)
+
+      assert friend_request.status == "accepted"
+      assert user.user_id == user1.id
+      assert user.friend_id == user2.id
+      assert friend.user_id == user2.id
+      assert friend.friend_id == user1.id
+    end
+  end
+
   describe "friend_requests" do
     alias Rivalry.Social.FriendRequest
 
