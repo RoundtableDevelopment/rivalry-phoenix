@@ -1,11 +1,13 @@
 defmodule Rivalry.Social.UserFriend do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Rivalry.Accounts.User
+  alias Rivalry.Social.FriendRequest
 
   schema "user_friends" do
-    field :user_id, :id
-    field :friend_id, :id
-    field :friend_request_id, :id
+    belongs_to :user, User
+    belongs_to :friend, User
+    belongs_to :friend_request, FriendRequest
 
     timestamps(type: :utc_datetime)
   end

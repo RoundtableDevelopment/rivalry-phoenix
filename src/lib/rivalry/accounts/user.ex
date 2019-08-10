@@ -2,6 +2,7 @@ defmodule Rivalry.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
   alias Rivalry.Teams.Team
+  alias Rivalry.Social.UserFriend
 
   schema "users" do
     field :email, :string
@@ -10,6 +11,8 @@ defmodule Rivalry.Accounts.User do
     field :password_hash, :string
     field :is_admin, :boolean, default: false
     belongs_to :team, Team
+    has_many :user_friends, UserFriend
+    has_many :friends, through: [:user_friends, :friend]
 
     timestamps()
   end
