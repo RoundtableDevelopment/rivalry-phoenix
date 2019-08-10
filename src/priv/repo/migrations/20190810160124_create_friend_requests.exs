@@ -13,5 +13,6 @@ defmodule Rivalry.Repo.Migrations.CreateFriendRequests do
 
     create index(:friend_requests, [:user_id])
     create index(:friend_requests, [:friend_id])
+    create unique_index(:friend_requests, [:user_id, :friend_id])
   end
 end
