@@ -13,15 +13,51 @@
 alias Rivalry.Accounts
 alias Rivalry.Teams
 
-Accounts.create_user(%{
-  username: "dmcbrayer",
-  email: "user@mail.com",
-  password: "qwer1234",
-  is_admin: true
-})
-
+users = [
+  %{
+    username: "dmcbrayer",
+    email: "user@mail.com",
+    password: "qwer1234",
+    is_admin: true
+  },
+  %{
+    username: "user1",
+    email: "user1@mail.com",
+    password: "qwer1234",
+    is_admin: false
+  },
+  %{
+    username: "user2",
+    email: "user2@mail.com",
+    password: "qwer1234",
+    is_admin: false
+  },
+  %{
+    username: "user3",
+    email: "user3@mail.com",
+    password: "qwer1234",
+    is_admin: false
+  },
+  %{
+    username: "user4",
+    email: "user5@mail.com",
+    password: "qwer1234",
+    is_admin: false
+  },
+  %{
+    username: "user5",
+    email: "user5@mail.com",
+    password: "qwer1234",
+    is_admin: false
+  }
+]
 
 teams = ["Alabama", "Auburn", "Georgia", "Texas", "Florida"]
+
+for user <- users do
+  Accounts.create_user(user)
+end
+
 for team <- teams do
   Teams.create_team(%{name: team})
 end
