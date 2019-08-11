@@ -15,8 +15,8 @@
             <tr>
                 <td><%= request.friend.username %></td>
                 <td><%= request.status %></td>
-                <td>Accept Button</td>
-                <td>Reject Button</td>
+                <td><%= link "Accept", to: Routes.friend_request_path(@conn, :accept, request), method: :put %></td>
+                <td><%= link "Reject", to: Routes.friend_request_path(@conn, :reject, request), method: :put %></td>
             </tr>
         <% end %>
     </tbody>
@@ -36,7 +36,7 @@
             <tr>
                 <td><%= request.friend.username %></td>
                 <td><%= request.status %></td>
-                <td>Cancel Button</td>
+                <td><%= link "Cancel", to: Routes.friend_request_path(@conn, :delete, request), method: :delete %></td>
             </tr>
         <% end %>
     </tbody>

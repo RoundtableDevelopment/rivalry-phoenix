@@ -25,7 +25,9 @@ defmodule RivalryWeb.Router do
     scope "/" do
       pipe_through [:authenticate_user]
       resources "/users", UserController, only: [:edit, :update]
-      resources "/friend_requests", FriendRequestController, only: [:index, :update]
+      resources "/friend_requests", FriendRequestController, only: [:index, :delete]
+      put "/friend_requests/:id/accept", FriendRequestController, :accept
+      put "/friend_requests/:id/reject", FriendRequestController, :reject
     end
   end
 
