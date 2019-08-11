@@ -26,6 +26,7 @@ defmodule RivalryWeb.ShoutChannel do
           id: shout.id,
           sender_id: shout.sender_id,
           recipient_id: shout.recipient_id,
+          team_id: team.id,
           message: team.message
         })
 
