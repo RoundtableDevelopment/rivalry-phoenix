@@ -1,6 +1,5 @@
 defmodule Rivalry.TestHelpers do
-  alias Rivalry.{Accounts,Social}
-  alias Rivalry.Teams
+  alias Rivalry.{Accounts,Social,Teams,Messages}
 
   def user_fixture(attrs \\ %{}) do
     username = "user#{System.unique_integer([:positive])}"
@@ -57,5 +56,19 @@ defmodule Rivalry.TestHelpers do
       |> Social.create_user_friend()
 
     user_friend
+  end
+
+  def shout_fixture(attrs \\ %{}) do
+    [user1, user2] = [user_fixture(), user_fixture()]
+
+    {:ok, shout} =
+      attrs
+      |> Enum.into(%{
+            sender_id: attrs[:user_id] || user1.id,
+            recipient_id: attrs[:friend_id] || user2.id
+         })
+      |> Messages.create_shout()
+
+    shout
   end
 end
