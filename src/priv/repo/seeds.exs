@@ -10,48 +10,7 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-alias Rivalry.Accounts
-alias Rivalry.Teams
-alias Rivalry.Social
-
-users = [
-  %{
-    username: "admin",
-    email: "admin@mail.com",
-    password: "qwer1234",
-    is_admin: true
-  },
-  %{
-    username: "user1",
-    email: "user1@mail.com",
-    password: "qwer1234",
-    is_admin: false
-  },
-  %{
-    username: "user2",
-    email: "user2@mail.com",
-    password: "qwer1234",
-    is_admin: false
-  },
-  %{
-    username: "user3",
-    email: "user3@mail.com",
-    password: "qwer1234",
-    is_admin: false
-  },
-  %{
-    username: "user4",
-    email: "user5@mail.com",
-    password: "qwer1234",
-    is_admin: false
-  },
-  %{
-    username: "user5",
-    email: "user5@mail.com",
-    password: "qwer1234",
-    is_admin: false
-  }
-]
+alias Rivalry.{Accounts,Teams,Social}
 
 teams = [
   %{
@@ -71,17 +30,62 @@ teams = [
     message: "Hook Em Horns!"
   },
   %{
-    name: "Florda",
+    name: "Florida",
     message: "Go Gators!"
+  }
+]
+
+for team <- teams do
+  Teams.create_team(team)
+end
+
+users = [
+  %{
+    username: "admin",
+    email: "admin@mail.com",
+    password: "qwer1234",
+    is_admin: true,
+    team_id: 1
+  },
+  %{
+    username: "user1",
+    email: "user1@mail.com",
+    password: "qwer1234",
+    is_admin: false,
+    team_id: 1
+  },
+  %{
+    username: "user2",
+    email: "user2@mail.com",
+    password: "qwer1234",
+    is_admin: false,
+    team_id: 2
+  },
+  %{
+    username: "user3",
+    email: "user3@mail.com",
+    password: "qwer1234",
+    is_admin: false,
+    team_id: 3
+  },
+  %{
+    username: "user4",
+    email: "user5@mail.com",
+    password: "qwer1234",
+    is_admin: false,
+    team_id: 4
+  },
+  %{
+    username: "user5",
+    email: "user5@mail.com",
+    password: "qwer1234",
+    is_admin: false,
+    team_id: 5
   }
 ]
 
 for user <- users do
   Accounts.create_user(user)
-end
-
-for team <- teams do
-  Teams.create_team(team)
 end
 
 # Set up some social tests

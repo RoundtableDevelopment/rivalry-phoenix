@@ -1,6 +1,6 @@
 defmodule RivalryWeb.ShoutChannel do
   use RivalryWeb, :channel
-  alias Rivalry.{Accounts,Messages}
+  alias Rivalry.{Accounts,Messages,Teams}
 
   def join("users:" <> user_id, _params, socket) do
     {:ok, %{message: "Hello"}, assign(socket, :user_id, user_id)}
@@ -13,6 +13,7 @@ defmodule RivalryWeb.ShoutChannel do
 
   def handle_in("send_shout", %{"recipient_id" => recipient_id}, user, socket) do
     recipient = Accounts.get_user!(recipient_id)
+    team = Teams.get_team!(user.team_id)
     case Messages.send_shout(user, recipient) do
       {:ok, shout} ->
         broadcast!(socket, "send_shout", %{
@@ -21,11 +22,11 @@ defmodule RivalryWeb.ShoutChannel do
           recipient_id: shout.recipient_id
         })
 
-        RivalryWeb.Endpoint.broadcast_from!(self(), "users:" <> shout.recipient_id, "received_shout", %{
+        RivalryWeb.Endpoint.broadcast_from!(self(), "users:" <> recipient_id, "received_shout", %{
           id: shout.id,
           sender_id: shout.sender_id,
           recipient_id: shout.recipient_id,
-          message: "Hello"
+          message: team.message
         })
 
         {:reply, :ok, socket}
