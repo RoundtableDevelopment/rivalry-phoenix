@@ -7,6 +7,7 @@
 // Pass the token on params as below. Or remove it
 // from the params if you are not using authentication.
 import {Socket} from "phoenix"
+import sound from './sounds'
 
 let socket = new Socket("/socket", {
     params: {token: window.userToken},
@@ -81,6 +82,7 @@ if(element) {
   channel.on("received_shout", (resp) => {
     console.log(resp)
     console.log("Shout Received:", resp.message)
+    sound.play()
   })
 }
 
