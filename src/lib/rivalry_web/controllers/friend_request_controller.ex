@@ -5,7 +5,6 @@ defmodule RivalryWeb.FriendRequestController do
   plug :load_requests when action in [:index, :create, :accept, :reject]
   plug :load_friend when action in [:create]
 
-
   def index(conn, _) do
     render(conn, "index.html")
   end

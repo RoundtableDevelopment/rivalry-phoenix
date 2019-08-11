@@ -71,6 +71,12 @@ defmodule Rivalry.SocialTest do
       assert {:error, %Ecto.Changeset{}} = Social.create_friend_request(@invalid_attrs)
     end
 
+    test "create_friend_request/1 fails with a self-friend" do
+      user1 = user_fixture()
+      invalid_attrs = Map.merge(%{user_id: user1.id, friend_id: user1.id}, @valid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Social.create_friend_request(invalid_attrs)
+    end
+
     test "update_friend_request/2 with valid data updates the friend_request" do
       friend_request = friend_request_fixture()
       assert {:ok, %FriendRequest{} = friend_request} = Social.update_friend_request(friend_request, @update_attrs)
