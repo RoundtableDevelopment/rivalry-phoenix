@@ -24,6 +24,9 @@ defmodule Rivalry.Social do
     update_friend_request(friend_request, %{status: "rejected"})
   end
 
+  # This could be refactored to use Multi.run and the existing
+  # context functions.
+  # See this: https://hexdocs.pm/phoenix/contexts.html#strategies-for-cross-context-workflows
   def accept_friend_request(friend_request) do
     fr_changeset =
       friend_request

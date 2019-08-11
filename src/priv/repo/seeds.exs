@@ -16,8 +16,8 @@ alias Rivalry.Social
 
 users = [
   %{
-    username: "dmcbrayer",
-    email: "user@mail.com",
+    username: "admin",
+    email: "admin@mail.com",
     password: "qwer1234",
     is_admin: true
   },
