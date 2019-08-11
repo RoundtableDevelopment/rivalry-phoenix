@@ -5,9 +5,9 @@ defmodule Rivalry.TeamsTest do
   alias Rivalry.Teams.Team
 
   describe "teams" do
-    @valid_attrs %{name: "some name"}
-    @update_attrs %{name: "some updated name"}
-    @invalid_attrs %{name: nil}
+    @valid_attrs %{name: "some name", message: "roll tide"}
+    @update_attrs %{name: "some updated name", message: "war eagle"}
+    @invalid_attrs %{name: nil, message: nil}
 
     test "list_teams/0 returns all teams" do
       team = team_fixture()
@@ -27,6 +27,7 @@ defmodule Rivalry.TeamsTest do
     test "create_team/1 with valid data creates a team" do
       assert {:ok, %Team{} = team} = Teams.create_team(@valid_attrs)
       assert team.name == "some name"
+      assert team.message == "roll tide"
     end
 
     test "create_team/1 with invalid data returns error changeset" do
@@ -37,6 +38,7 @@ defmodule Rivalry.TeamsTest do
       team = team_fixture()
       assert {:ok, %Team{} = team} = Teams.update_team(team, @update_attrs)
       assert team.name == "some updated name"
+      assert team.message == "war eagle"
     end
 
     test "update_team/2 with invalid data returns error changeset" do

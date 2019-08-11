@@ -20,7 +20,10 @@ defmodule Rivalry.TestHelpers do
   def team_fixture(attrs \\ %{}) do
     {:ok, team} =
       attrs
-      |> Enum.into(%{name: attrs[:name] || "Alabama"})
+      |> Enum.into(%{
+          name: attrs[:name] || "Alabama",
+          message: attrs[:message] || "Roll Tide!"
+        })
       |> Teams.create_team()
 
     team

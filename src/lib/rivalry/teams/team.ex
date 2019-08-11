@@ -5,6 +5,7 @@ defmodule Rivalry.Teams.Team do
 
   schema "teams" do
     field :name, :string
+    field :message, :string
     has_many :users, User
 
     timestamps()
@@ -13,7 +14,7 @@ defmodule Rivalry.Teams.Team do
   @doc false
   def changeset(team, attrs) do
     team
-    |> cast(attrs, [:name])
-    |> validate_required([:name])
+    |> cast(attrs, [:name, :message])
+    |> validate_required([:name, :message])
   end
 end

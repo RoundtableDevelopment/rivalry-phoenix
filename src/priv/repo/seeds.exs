@@ -53,14 +53,35 @@ users = [
   }
 ]
 
-teams = ["Alabama", "Auburn", "Georgia", "Texas", "Florida"]
+teams = [
+  %{
+    name: "Alabama",
+    message: "Roll Tide!"
+  },
+  %{
+    name: "Auburn",
+    message: "War Eagle!"
+  },
+  %{
+    name: "Georgia",
+    message: "Go Dawgs!"
+  },
+  %{
+    name: "Texas",
+    message: "Hook Em Horns!"
+  },
+  %{
+    name: "Florda",
+    message: "Go Gators!"
+  }
+]
 
 for user <- users do
   Accounts.create_user(user)
 end
 
 for team <- teams do
-  Teams.create_team(%{name: team})
+  Teams.create_team(team)
 end
 
 # Set up some social tests
