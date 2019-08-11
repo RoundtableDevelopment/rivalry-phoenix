@@ -1,6 +1,6 @@
 defmodule RivalryWeb.FriendRequestController do
   use RivalryWeb, :controller
-  alias Rivalry.Social
+  alias Rivalry.{Accounts,Social}
 
   def index(conn, _) do
     current_user = conn.assigns.current_user
@@ -9,6 +9,22 @@ defmodule RivalryWeb.FriendRequestController do
     sent_requests = Social.list_sent_requests_for_user(current_user)
 
     render(conn, "index.html", received_requests: received_requests, sent_requests: sent_requests)
+  end
+
+  def create(conn, %{"friend_request" => %{"username" => username}}) do
+    current_user = conn.assigns.current_user
+    recipient = Accounts.get_user_by_username(username)
+    received_requests = Social.list_received_requests_for_user(current_user)
+    sent_requests = Social.list_sent_requests_for_user(current_user)
+
+    case Social.send_friend_request(current_user, recipient) do
+      {:ok, _fr} ->
+        conn
+        |> put_flash(:info, "Friend request successfully sent")
+        |> redirect(to: Routes.friend_request_path(conn, :index))
+      {:error, _changeset} ->
+        render(conn, "index.html", received_requests: received_requests, sent_request: sent_requests)
+    end
   end
 
   def accept(conn, %{"id" => id}) do

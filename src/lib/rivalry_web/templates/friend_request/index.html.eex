@@ -1,5 +1,13 @@
 <h1>Friend Requests</h1>
 
+<h3>New Friend Request</h3>
+<%= form_for @conn, Routes.friend_request_path(@conn, :create), [as: :friend_request], fn f -> %>
+    <div>
+        <%= text_input f, :username, placeholder: "username" %>
+    </div>
+    <%= submit "Send Request" %>
+<% end %>
+
 <h3>Received Requests</h3>
 <table>
     <thead>

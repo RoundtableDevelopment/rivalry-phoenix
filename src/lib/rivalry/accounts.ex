@@ -43,6 +43,11 @@ defmodule Rivalry.Accounts do
     |> Repo.one()
   end
 
+  def get_user_by_username(username) do
+    from(u in User, where: u.username == ^username)
+    |> Repo.one()
+  end
+
 
   def get_user_with_friends!(id) do
     get_user!(id)
