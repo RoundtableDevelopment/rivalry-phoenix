@@ -33,6 +33,9 @@
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= render @view_module, @view_template, assigns %>
     </main>
+    <%= if @current_user do %>
+      <div id="socketConnection" data-user-id="<%= @current_user.id%>">
+    <% end %>
     <script>window.userToken = "<%= assigns[:user_token] %>"</script>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>

@@ -54,13 +54,34 @@ let socket = new Socket("/socket", {
 //       end
 //     end
 //
-// Finally, connect to the socket:
-socket.connect()
 
-// Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("users:1", {})
-channel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
-  .receive("error", resp => { console.log("Unable to join", resp) })
+let element = document.getElementById("socketConnection")
+
+if(element) {
+  // Finally, connect to the socket:
+  socket.connect()
+  const userId = element.getAttribute("data-user-id")
+  let channel = socket.channel(`users:${userId}`, {})
+
+  // Now that you are connected, you can join channels with a topic:
+  channel.join()
+    .receive("ok", resp => { console.log("Joined successfully", resp) })
+    .receive("error", resp => { console.log("Unable to join", resp) })
+
+  const friends = Array.from(document.querySelectorAll('.shout'))
+
+  friends.forEach((friend) => {
+    friend.addEventListener('click', (e) => {
+      let element = e.target
+      let friendId = element.getAttribute('data-friend-id')
+      channel.push("send_shout", {recipient_id: friendId}).receive("error", e => console.log(e))
+    })
+  })
+
+  channel.on("received_shout", (resp) => {
+    console.log(resp)
+    console.log("Shout Received:", resp.message)
+  })
+}
 
 export default socket
