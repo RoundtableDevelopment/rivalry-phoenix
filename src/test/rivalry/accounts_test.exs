@@ -5,8 +5,8 @@ defmodule Rivalry.AccountsTest do
   alias Rivalry.Accounts.User
 
   describe "users" do
-    @valid_attrs %{email: "some email", username: "some username", password: "password"}
-    @update_attrs %{email: "some updated email", username: "some updated username", password: "password"}
+    @valid_attrs %{email: "test@example.com", username: "someusername", password: "password"}
+    @update_attrs %{email: "test@example.com", username: "someupdatedusername", password: "password"}
     @invalid_attrs %{email: nil, username: nil, password: nil}
 
     test "list_users/0 returns all users" do
@@ -21,19 +21,35 @@ defmodule Rivalry.AccountsTest do
 
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
-      assert user.email == "some email"
-      assert user.username == "some username"
+      assert user.email == "test@example.com"
+      assert user.username == "someusername"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Accounts.create_user(@invalid_attrs)
     end
 
+    test "changeset/2 validates username formatting" do
+      [valid, invalid1, invalid2] = ["cool_guy69", "b@tm@n", "!@#$!@#$"]
+
+      assert {:ok, user } = Accounts.create_user(%{@valid_attrs | username: valid})
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_user(%{@valid_attrs | username: invalid1})
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_user(%{@valid_attrs | username: invalid2})
+    end
+
+    test "changeset/2 validates email formatting" do
+      [valid, invalid1, invalid2] = ["cool_guy69@mail.com", "b@tm@n", "!@#$!@#$.com"]
+
+      assert {:ok, user } = Accounts.create_user(%{@valid_attrs | email: valid})
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_user(%{@valid_attrs | email: invalid1})
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_user(%{@valid_attrs | email: invalid2})
+    end
+
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
       assert {:ok, %User{} = user} = Accounts.update_user(user, @update_attrs)
-      assert user.email == "some updated email"
-      assert user.username == "some updated username"
+      assert user.email == "test@example.com"
+      assert user.username == "someupdatedusername"
     end
 
     test "update_user/2 with invalid data returns error changeset" do
@@ -56,7 +72,7 @@ defmodule Rivalry.AccountsTest do
   end
 
   describe "authenticate_by_email_and_pass/2" do
-    @email "user@localhost"
+    @email "user@localhost.com"
     @pass "123456"
 
     setup do
@@ -72,7 +88,7 @@ defmodule Rivalry.AccountsTest do
     end
 
     test "returns not found error with no matching user for email" do
-      assert {:error, :not_found} = Accounts.authenticate_by_email_and_pass("bademail@localhost", @pass)
+      assert {:error, :not_found} = Accounts.authenticate_by_email_and_pass("bademail@localhost.com", @pass)
     end
   end
 end

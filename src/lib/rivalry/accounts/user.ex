@@ -18,11 +18,15 @@ defmodule Rivalry.Accounts.User do
   end
 
   @doc false
+  @valid_username_regex ~r/^[\w\_\-]*$/
+  @valid_email_regex ~r/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:username, :email, :password, :team_id, :is_admin])
     |> validate_required([:username, :email, :password])
     |> validate_length(:password, min: 6, max: 100)
+    |> validate_format(:username, @valid_username_regex)
+    |> validate_format(:email, @valid_email_regex)
     |> unique_constraint(:username)
     |> put_pass_hash()
   end
